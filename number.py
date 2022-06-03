@@ -95,12 +95,12 @@ def main(name_search):
     o_url = "https://www.fnvshen.com/girl/" + girl1 + "/album/"
     urllist = get_url(o_url + "1.html", set())
 
+    root = Path(os.getcwd())
     a_cont = 0
-    exist_dir_search = os.path.isdir(m_name_search)
+    exist_dir_search = os.path.isdir(root / m_name_search)
     if not exist_dir_search:
-        os.mkdir(m_name_search)
-    pwd = Path(os.getcwd())
-    os.chdir(pwd / m_name_search)
+        os.mkdir(root / m_name_search)
+    os.chdir(root / m_name_search)
     download_time = 999
     download_time_counter = 1  # 下载的专辑数计数
     for url in urllist:
@@ -109,11 +109,11 @@ def main(name_search):
         print(url)
         html_new_dir = open_url(url)
         new_dir_name = re.findall("<title>(.+?)</title>", html_new_dir)[0]
-        dir_exist = os.path.isdir(new_dir_name)
+        dir_exist = os.path.isdir(root / m_name_search / new_dir_name)
         if dir_exist:
             continue
-        os.mkdir(pwd / m_name_search / new_dir_name)
-        os.chdir(pwd / m_name_search / new_dir_name)
+        os.mkdir(root / m_name_search / new_dir_name)
+        os.chdir(root / m_name_search / new_dir_name)
         new_href = "10"
         for i in range(1, 100):
             url_new = url + str(i) + ".html"
@@ -125,10 +125,7 @@ def main(name_search):
                 new_href = re.findall(">([^<]+?)</a><a class='a1'[^>]+?>下一页</a>", a)[0]
             headers = {
                 "Referer": url_new,
-                "User-Agent": "Mozilla/5.0 (Window\
-s NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, \
-like Gecko) Chrome/53.0.2785.104 Safari/537.36 Core/1.53\
-.3103.400 QQBrowser/9.6.11372.400",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.30",
             }
             get_img(a, headers)
             print(i)
@@ -146,12 +143,12 @@ like Gecko) Chrome/53.0.2785.104 Safari/537.36 Core/1.53\
             time.sleep(1)
             thread_c1 = threading.active_count()
             print("当前线程数---初始线程数：" + str(thread_c1) + "---" + str(thread_c0))
-        os.chdir(pwd / m_name_search)
+        os.chdir(root / m_name_search)
         if download_time_counter >= download_time:
             break
         download_time_counter += 1
         time.sleep(0.2)
-    os.chdir(pwd)
+    os.chdir(root)
 
 
 if __name__ == "__main__":

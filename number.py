@@ -47,7 +47,9 @@ def get_url(url, visited: Set[str]):
                 other_url = "https://fnvshen.com" + other
                 visited.add(other_url)
                 urllist += get_url(other_url, visited)
-            urllist += re.findall("<a class='igalleryli_link' href='/g/([^/]+?)/'", html)
+            urllist += re.findall(
+                "<a class='igalleryli_link' href='/g/([^/]+?)/'", html
+            )
             try_c = 3
             return urllist
         except:
@@ -153,6 +155,6 @@ like Gecko) Chrome/53.0.2785.104 Safari/537.36 Core/1.53\
 
 
 if __name__ == "__main__":
-    ids = map(int, sys.argv[1:])
+    ids = list(map(int, sys.argv[1:]))
 
-    Pool(len(ids)).map(main, map(str, ids))
+    Pool(len(sys.argv) - 1).map(main, map(str, sys.argv[1:]))
